@@ -334,6 +334,20 @@
        :attrs {}
        :body (remove nil? content)})))
 
-(defmacro elements-> [e]
+(defmulti mkbody class)
+
+(defn elements* [e]
   (let [{:keys [tag attrs body]} (tag-attr-body e)]
-    `(element ~tag ~attrs ~@body)))
+    `(element
+       ~tag
+       ~attrs
+       ~@(map mkbody body))))
+
+(defmethod mkbody java.lang.String [e]
+  e)
+
+(defmethod mkbody clojure.lang.IPersistentVector [e]
+  (elements* e))
+
+(defmacro elements-> [e]
+  (elements* e))

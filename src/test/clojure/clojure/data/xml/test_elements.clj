@@ -50,3 +50,8 @@
 
   (is (= (xml/element :foo {} "content-1" "content-2" "content-3")
          (elements-> [:foo "content-1" "content-2" "content-3"]))))
+
+(deftest
+  nesting
+  (is (= (xml/element :foo {} (xml/element :bar))
+         (elements-> [:foo [:bar]]))))
