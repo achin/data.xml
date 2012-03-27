@@ -193,7 +193,7 @@
 ; Note, sreader is mutable and mutated here in pull-seq, but it's
 ; protected by a lazy-seq so it's thread-safe.
 (defn- pull-seq
-  "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to 
+  "Creates a seq of events.  The XMLStreamConstants/SPACE clause below doesn't seem to
    be triggered by the JDK StAX parser, but is by others.  Leaving in to be more complete."
   [^XMLStreamReader sreader]
   (lazy-seq
@@ -203,7 +203,7 @@
        (cons (event :start-element
                     (keyword (.getLocalName sreader))
                     (attr-hash sreader) nil)
-             (pull-seq sreader)) 
+             (pull-seq sreader))
        XMLStreamConstants/END_ELEMENT
        (cons (event :end-element
                     (keyword (.getLocalName sreader)) nil nil)
@@ -283,7 +283,7 @@
 
     (when (instance? java.io.OutputStreamWriter stream)
       (check-stream-encoding stream (or (:encoding opts) "UTF-8")))
-    
+
     (.writeStartDocument writer (or (:encoding opts) "UTF-8") "1.0")
     (emit-element e writer)
     (.writeEndDocument writer)
@@ -304,7 +304,7 @@
 
 (defn indent
   "Emits the XML and indents the result.  WARNING: this is slow
-   it will emit the XML and read it in again to indent it.  Intended for 
+   it will emit the XML and read it in again to indent it.  Intended for
    debugging/testing only."
   [e ^java.io.Writer stream & {:as opts}]
   (let [sw (java.io.StringWriter.)
