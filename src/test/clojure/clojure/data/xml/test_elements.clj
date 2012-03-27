@@ -10,10 +10,9 @@
       :author "Alex Chin"}
   clojure.data.xml.test-elements
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element elements->]]))
+        [clojure.data.xml :as xml :only [element tag-attr-body elements->]]))
 
-(deftest
-  simple
+(deftest test-simple
   (is (= (xml/element :foo)
          (elements-> [:foo])))
 
@@ -25,3 +24,29 @@
 
   (is (= (xml/element :foo {} nil)
          (elements-> [:foo {} nil]))))
+
+(deftest test-tag-attrs-body-parsing
+  (is (= {:tag :foo, :attrs {:attr "1"}, :body '("content")}
+         (tag-attr-body [:foo {:attr "1"} "content"])))
+
+  (is (= {:tag :foo, :attrs {:attr "1"}, :body '()}
+         (tag-attr-body [:foo {:attr "1"}])))
+
+  (is (= {:tag :foo, :attrs {:attr "1"}, :body '("content-1" "content-3")}
+         (tag-attr-body [:foo {:attr "1"} "content-1" nil "content-3"])))
+
+  (is (= {:tag :foo, :attrs {}, :body '()}
+         (tag-attr-body [:foo])))
+
+  (is (= {:tag :foo, :attrs {}, :body '("content-1" "content-2" "content-3")}
+         (tag-attr-body [:foo "content-1" "content-2" "content-3"])))
+
+  (is (= {:tag :foo, :attrs {}, :body '("content-1" "content-3")}
+         (tag-attr-body [:foo "content-1" nil "content-3"]))))
+
+(deftest test-optional-attr-map
+  (is (= (xml/element :foo {} "content")
+         (elements-> [:foo "content"])))
+
+  (is (= (xml/element :foo {} "content-1" "content-2" "content-3")
+         (elements-> [:foo "content-1" "content-2" "content-3"]))))

@@ -324,5 +324,16 @@
 ;;;; element building
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defmacro elements-> [[tag attrs & body]]
-  `(element ~tag ~attrs ~@body))
+(defn tag-attr-body [[tag & content]]
+  (let [attrs-or-body (first content)]
+    (if (map? attrs-or-body)
+      {:tag tag
+       :attrs attrs-or-body
+       :body (remove nil? (rest content))}
+      {:tag tag
+       :attrs {}
+       :body (remove nil? content)})))
+
+(defmacro elements-> [e]
+  (let [{:keys [tag attrs body]} (tag-attr-body e)]
+    `(element ~tag ~attrs ~@body)))
