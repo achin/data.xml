@@ -320,3 +320,9 @@
     (indent e sw)
     (.toString sw))  )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; element building
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro elements-> [[tag attrs & body]]
+  `(element ~tag ~attrs ~@body))
