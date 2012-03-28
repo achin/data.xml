@@ -10,19 +10,19 @@
       :author "Alex Chin"}
   clojure.data.xml.test-elements
   (:use [clojure.test :only [deftest is are]]
-        [clojure.data.xml :as xml :only [element tag-attr-body elements]]))
+        [clojure.data.xml :only [element tag-attr-body elements]]))
 
 (deftest test-simple
-  (is (= (xml/element :foo)
+  (is (= (element :foo)
          (elements [:foo])))
 
-  (is (= (xml/element :foo {:attr "bar attr value"})
+  (is (= (element :foo {:attr "bar attr value"})
          (elements [:foo {:attr "bar attr value"}])))
 
-  (is (= (xml/element :foo {:attr "bar attr value"} "content")
+  (is (= (element :foo {:attr "bar attr value"} "content")
          (elements [:foo {:attr "bar attr value"} "content"])))
 
-  (is (= (xml/element :foo {} nil)
+  (is (= (element :foo {} nil)
          (elements [:foo {} nil]))))
 
 (deftest test-tag-attrs-body-parsing
@@ -45,13 +45,19 @@
          (tag-attr-body [:foo "content-1" nil "content-3"]))))
 
 (deftest test-optional-attr-map
-  (is (= (xml/element :foo {} "content")
+  (is (= (element :foo {} "content")
          (elements [:foo "content"])))
 
-  (is (= (xml/element :foo {} "content-1" "content-2" "content-3")
+  (is (= (element :foo {} "content-1" "content-2" "content-3")
          (elements [:foo "content-1" "content-2" "content-3"]))))
 
 (deftest
   nesting
-  (is (= (xml/element :foo {} (xml/element :bar))
-         (elements [:foo [:bar]]))))
+ (is (= (element :foo {} (element :bar))
+         (elements [:foo [:bar]])))
+
+ (is (= (element :foo {}
+                 (element :bar)
+                 (element :baz)
+                 (element :bat))
+         (elements [:foo [:bar] [:baz] [:bat]]))))
