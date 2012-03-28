@@ -51,8 +51,7 @@
   (is (= (element :foo {} "content-1" "content-2" "content-3")
          (elements [:foo "content-1" "content-2" "content-3"]))))
 
-(deftest
-  nesting
+(deftest test-nesting
   (is (= (element :foo {} (element :bar))
          (elements [:foo [:bar]])))
 
