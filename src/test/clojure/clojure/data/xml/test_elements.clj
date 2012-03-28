@@ -53,11 +53,17 @@
 
 (deftest
   nesting
- (is (= (element :foo {} (element :bar))
+  (is (= (element :foo {} (element :bar))
          (elements [:foo [:bar]])))
 
- (is (= (element :foo {}
-                 (element :bar)
-                 (element :baz)
-                 (element :bat))
-         (elements [:foo [:bar] [:baz] [:bat]]))))
+  (is (= (element :foo {}
+                  (element :bar)
+                  (element :baz)
+                  (element :bat))
+         (elements [:foo [:bar] [:baz] [:bat]])))
+
+  (is (= (element :foo {}
+                  (element :bar {}
+                           (element :baz {}
+                                    (element :bat))))
+         (elements [:foo [:bar [:baz [:bat]]]]))))
