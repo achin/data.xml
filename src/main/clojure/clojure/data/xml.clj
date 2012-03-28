@@ -336,18 +336,15 @@
 
 (defmulti mkbody class)
 
-(defn elements* [e]
+(defn elements [e]
   (let [{:keys [tag attrs body]} (tag-attr-body e)]
-    `(element
-       ~tag
-       ~attrs
-       ~@(map mkbody body))))
+    (apply element
+       tag
+       attrs
+       (map mkbody body))))
 
 (defmethod mkbody java.lang.String [e]
   e)
 
 (defmethod mkbody clojure.lang.IPersistentVector [e]
-  (elements* e))
-
-(defmacro elements-> [e]
-  (elements* e))
+  (elements e))
