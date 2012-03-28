@@ -334,17 +334,12 @@
        :attrs {}
        :body (remove nil? content)})))
 
-(defmulti mkbody class)
+(defmulti elements class)
 
-(defn elements [e]
-  (let [{:keys [tag attrs body]} (tag-attr-body e)]
-    (apply element
-       tag
-       attrs
-       (map mkbody body))))
+(defmethod elements clojure.lang.IPersistentVector [e]
+  (let [{:keys [tag attrs body]} (tag-attr-body e)
+        children (map elements body)]
+    (apply element tag attrs children)))
 
-(defmethod mkbody java.lang.String [e]
+(defmethod elements java.lang.String [e]
   e)
-
-(defmethod mkbody clojure.lang.IPersistentVector [e]
-  (elements e))
