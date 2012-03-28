@@ -66,3 +66,15 @@
                            (element :baz {}
                                     (element :bat))))
          (elements [:foo [:bar [:baz [:bat]]]]))))
+
+(deftest test-seqs
+  (is (= [(element :bar {} "content-1")
+          (element :bar {} "content-2")
+          (element :bar {} "content-3")]
+         (elements (map #(vector :bar (str "content-" %)) (range 1 4)))))
+
+  (is (= (element :foo {}
+                  (element :bar {} "content-1")
+                  (element :bar {} "content-2")
+                  (element :bar {} "content-3"))
+         (elements [:foo (map #(vector :bar (str "content-" %)) (range 1 4))]))))

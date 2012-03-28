@@ -338,8 +338,11 @@
 
 (defmethod elements clojure.lang.IPersistentVector [e]
   (let [{:keys [tag attrs body]} (tag-attr-body e)
-        children (map elements body)]
+        children (flatten (map elements body))]
     (apply element tag attrs children)))
+
+(defmethod elements clojure.lang.ISeq [es]
+  (map elements es))
 
 (defmethod elements java.lang.String [e]
   e)
